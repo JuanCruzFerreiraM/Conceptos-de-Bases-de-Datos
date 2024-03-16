@@ -1,6 +1,6 @@
 
 Program eje1;
-
+//Preguntar si deberiamos verificar tipos, o asegurarnos de problemas a la hora de abrir los archivos.
 Const keyWord = 'cemento';
   //Palbra que al ingresarse concluye con la carga de valores al archivo.
 

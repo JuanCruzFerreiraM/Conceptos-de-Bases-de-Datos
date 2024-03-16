@@ -1,8 +1,11 @@
 //Preguntar por que anda mal.
 Program eje2;
 
+Type 
+  intFile = file of Integer;
+
 Var 
-  arch: Text;
+  arch: intFile;
   readValue: Integer;
   minValue: Integer;
   maxValue: Integer;

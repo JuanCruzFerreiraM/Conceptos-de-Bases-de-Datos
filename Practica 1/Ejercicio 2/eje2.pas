@@ -1,4 +1,4 @@
-//Preguntar por que anda mal.
+
 Program eje2;
 
 Type 

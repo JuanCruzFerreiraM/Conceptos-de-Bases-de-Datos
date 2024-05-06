@@ -5,4 +5,5 @@ archivos y sistemas de archivos.</p>
 <h2>Practicas</h2>
 <ul>
     <li><a href='https://github.com/JuanCruzFerreiraM/Conceptos-de-Bases-de-Datos/tree/main/Practica%201'>Practica 1</a></li>
+    <li><a href='https://github.com/JuanCruzFerreiraM/Conceptos-de-Bases-de-Datos/tree/main/Practica%202'>Practica 2</a></li>
 </ul>

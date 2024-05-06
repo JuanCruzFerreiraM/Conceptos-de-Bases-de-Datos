@@ -92,7 +92,7 @@ Begin
     emp4.birthdate := '1992-04-20';
     emp4.address := '321 Pine St';
     emp4.phoneNumber := '555-3456';
-    emp4.vactationDays := 18;
+    emp4.vactationDays := 6;
     Write(master, emp4);
 
     emp5.cod := 5;

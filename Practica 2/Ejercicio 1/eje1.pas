@@ -79,24 +79,24 @@ Begin
             Reset(arr_f[i]);
             leer(arr_f[i],arr_r[i]);    
         End;
-    cant_d := 0;
     Read(master,regm);    
     min_cod(arr_r,arr_f,min);
     While (min.cod <> highValue) Do
-    cant_d := 0;
         Begin
+        cant_d := 0;    
             While (regm.cod <> min.cod) Do
                 Read(master,regm);
             aux := min.cod;
+            
             While (aux = min.cod) Do
                 Begin
                     cant_d := cant_d + min.days_requested;
                     min_cod(arr_r,arr_f,min);
-                    WriteLn(cant_d);
+                    
                 End;
             If ((regm.vactationDays - cant_d) <  0) Then
                 Begin
-                    WriteLn(txt, regm.cod, regm.name, regm.surname, regm.vactationDays, cant_d);
+                    WriteLn(txt, regm.cod,' ', regm.name,' ', regm.surname,' ', regm.vactationDays,' ', cant_d);
                 End
             Else
                 Begin
@@ -118,6 +118,7 @@ var
     txt:   Text;
     regm:   reg_master;
 Begin
+    //Las asignaciones se puede realizar haciendo un for para los archivos detalles pero no me funciona sysutils
     Assign(master, 'master');
     Assign(txt, 'txt');
     Assign(arr_f[1],'det1');
@@ -135,7 +136,7 @@ Begin
     while not Eof(master) do
         begin
             read(master, regm);
-            writeln('Codigo: ',regm.cod,'Nombre: ', regm.name,'Apellido: ', regm.surname,'Dias restantes: ', regm.vactationDays);
+            writeln('Codigo: ',regm.cod,' Nombre: ', regm.name,' Apellido: ', regm.surname,' Dias restantes: ', regm.vactationDays);
         end;
     Close(master);
 End.

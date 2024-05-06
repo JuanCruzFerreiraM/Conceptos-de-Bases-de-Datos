@@ -1,96 +1,141 @@
-program eje1;
-//El codigo se prueba en funcionamiento con dos archivos detalles, funciona para n detalles cambiando el valor de la constante 
-//amount
+
+Program eje1;
+//El codigo se prueba en funcionamiento con 10 archivos detalles, funciona para n detalles cambiando el valor de la constante amount
+
 Const 
-    highValue = '9999';
-    amount = 2;
-Type
-    reg_det = record
-        cod: integer;
-        date: string;
-        days_requested: integer;
-    end;
+    highValue =   9999;
+    amount =   10;
 
-    reg_master = record
-        cod: integer;
-        name: string;
-        surname: string;
-        birthdate: string;
-        address: string;
-        phoneNumber: string;
-        vactationDays: integer;
-    end;
+Type 
+    reg_det =   Record
+        cod:   integer;
+        date:   string;
+        days_requested:   integer;
+    End;
 
-    file_det = file of reg_det;
-    file_master = file of master;
+    reg_master =   Record
+        cod:   integer;
+        name:   string;
+        surname:   string;
+        birthdate:   string;
+        address:   string;
+        phoneNumber:   string;
+        vactationDays:   integer;
+    End;
 
-    array_reg_d = array[1..amount] of reg_det;
-    array_file_d = array[1..amount] of file_det;
+    file_det =   file Of reg_det;
+    file_master =   file Of reg_master;
 
-    procedure leer(var archivo: file_det; var dato: reg_det);
-    begin
-        if not eof(archivo) then
-            read(archivo, dato)
-        else
-            dato.cod := highValue;
-    end;
+    array_reg_d =   array[1..amount] Of reg_det;
+    array_file_d =   array[1..amount] Of file_det;
 
-    function min_pos(var arr: array_reg_d): integer;
-    var 
-        i, min, pos_min: integer;
-    begin
-       min := arr[1].cod;
-       pos_min := 1;
-       for i:= 2 to amount do 
-        if (min > arr[i].cod) then 
-            begin
-              min:= arr[i].cod;
-              pos_min := i;
-            end;
-        min_pos := pos_min;
-    end;
+Procedure leer(Var archivo: file_det; Var dato: reg_det);
+Begin
+    If Not eof(archivo) Then
+        read(archivo, dato)
+    Else
+        dato.cod := highValue;
+End;
 
-    procedure min_cod (var arr_r: array_reg_d; var arr_f: array_file_d; var min: reg_det);
-    var
-        i: integer;
-    begin
-        i:= min_pos(arr_r);
-        min:= arr_r[i];
-        leer(arr_f[i],arr_r[i]); 
-    end;
+Function min_pos(Var arr: array_reg_d):   integer;
 
-    procedure updateMaster(var master: file_master; var arr_r: array_reg_d; var arr_f: array_file_d; var txt: Text);
-    var
-        min: reg_det;
-        regm: reg_master;
-        aux: integer;
-        cant_d: integer;
-        text: String;
-    begin
-        min_cod(arr_r,arr_f,min);
-        while (min.cod <> highValue) do 
-            begin
-                while (regm.cod <> min.cod) do 
-                    Read(master,regm);
-            aux:= min.cod;
-            while (aux = min.cod) do
-              begin
-                cant_d := cant_d + min.days_requested;
-                min_cod(arr_r,arr_f,min);
-              end;
-            if ((regm.vactationDays - cant_d) <  0) then 
-                begin
-                    Write(txt, regm.cod, regm.name, regm.surname, regm.vactationDays, cant_d);
-                end
-            else 
-                begin
-                  regm.vactationDays := regm.vactationDays - cant_d;  
-                  Seek(master, FilePos(master) - 1);
-                  Write(master, regm);
-                end;    
-            end;
-    end;
+Var 
+    i, min, pos_min:   integer;
+Begin
+    min := arr[1].cod;
+    pos_min := 1;
+    For i:= 2 To amount Do
+        If (min > arr[i].cod) Then
+            Begin
+                min := arr[i].cod;
+                pos_min := i;
+            End;
+    min_pos := pos_min;
+End;
 
-Begin 
+Procedure min_cod (Var arr_r: array_reg_d; Var arr_f: array_file_d; Var min: reg_det);
 
+Var 
+    i:   integer;
+Begin
+    i := min_pos(arr_r);
+    min := arr_r[i];
+    leer(arr_f[i],arr_r[i]);
+End;
+
+Procedure updateMaster(Var master: file_master; Var arr_r: array_reg_d; Var arr_f: array_file_d; Var txt: Text);
+
+Var 
+    min:   reg_det;
+    regm:   reg_master;
+    aux:   integer;
+    cant_d:   integer;
+    i:  integer;
+Begin
+    Reset(master);
+    Rewrite(txt);
+    For i:= 1 To amount Do
+        Begin
+            Reset(arr_f[i]);
+            leer(arr_f[i],arr_r[i]);    
+        End;
+    cant_d := 0;
+    Read(master,regm);    
+    min_cod(arr_r,arr_f,min);
+    While (min.cod <> highValue) Do
+    cant_d := 0;
+        Begin
+            While (regm.cod <> min.cod) Do
+                Read(master,regm);
+            aux := min.cod;
+            While (aux = min.cod) Do
+                Begin
+                    cant_d := cant_d + min.days_requested;
+                    min_cod(arr_r,arr_f,min);
+                    WriteLn(cant_d);
+                End;
+            If ((regm.vactationDays - cant_d) <  0) Then
+                Begin
+                    WriteLn(txt, regm.cod, regm.name, regm.surname, regm.vactationDays, cant_d);
+                End
+            Else
+                Begin
+                    regm.vactationDays := regm.vactationDays - cant_d;
+                    Seek(master, FilePos(master) - 1);
+                    Write(master, regm);
+                End;
+        End;
+        Close(master);
+        Close(txt);
+        for i:= 1 To amount Do
+            Close(arr_f[i]);
+End;
+
+var 
+    master:   file_master;
+    arr_f:   array_file_d;
+    arr_r:   array_reg_d;
+    txt:   Text;
+    regm:   reg_master;
+Begin
+    Assign(master, 'master');
+    Assign(txt, 'txt');
+    Assign(arr_f[1],'det1');
+    Assign(arr_f[2],'det2');
+    Assign(arr_f[3],'det3');
+    Assign(arr_f[4],'det4');
+    Assign(arr_f[5],'det5');
+    Assign(arr_f[6],'det6');
+    Assign(arr_f[7],'det7');
+    Assign(arr_f[8],'det8');
+    Assign(arr_f[9],'det9');
+    Assign(arr_f[10],'det10');
+    updateMaster(master,arr_r,arr_f,txt);
+    Reset(master);
+    while not Eof(master) do
+        begin
+            read(master, regm);
+            writeln('Codigo: ',regm.cod,'Nombre: ', regm.name,'Apellido: ', regm.surname,'Dias restantes: ', regm.vactationDays);
+        end;
+    Close(master);
 End.

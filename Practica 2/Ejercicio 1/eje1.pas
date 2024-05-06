@@ -1,47 +1,96 @@
+program eje1;
+//El codigo se prueba en funcionamiento con dos archivos detalles, funciona para n detalles cambiando el valor de la constante 
+//amount
+Const 
+    highValue = '9999';
+    amount = 2;
+Type
+    reg_det = record
+        cod: integer;
+        date: string;
+        days_requested: integer;
+    end;
 
-Program eje1;
+    reg_master = record
+        cod: integer;
+        name: string;
+        surname: string;
+        birthdate: string;
+        address: string;
+        phoneNumber: string;
+        vactationDays: integer;
+    end;
 
-Const N =   10;
+    file_det = file of reg_det;
+    file_master = file of master;
 
-Type 
+    array_reg_d = array[1..amount] of reg_det;
+    array_file_d = array[1..amount] of file_det;
 
-    employeeSlave =   Record
-        code:   integer;
-        date:   string;
-        //formateamos el string ? estilo dd/mm/aaaa
-        daysAsked:   integer;
-    End;
+    procedure leer(var archivo: file_det; var dato: reg_det);
+    begin
+        if not eof(archivo) then
+            read(archivo, dato)
+        else
+            dato.cod := highValue;
+    end;
 
-    employeeMaster =   Record
-        code:   integer;
-        name:   string;
-        surname:   string;
-        phoneNumber:   string;
-        birthDate:   string;
-        amountOfChildren:   integer;
-        amountOfVDays:   integer;
-    End;
+    function min_pos(var arr: array_reg_d): integer;
+    var 
+        i, min, pos_min: integer;
+    begin
+       min := arr[1].cod;
+       pos_min := 1;
+       for i:= 2 to amount do 
+        if (min > arr[i].cod) then 
+            begin
+              min:= arr[i].cod;
+              pos_min := i;
+            end;
+        min_pos := pos_min;
+    end;
 
-    arrayOfEmployeeSlave =   Array [1..N] Of employeeSlave;
-    fileOfEmployeeMaster =   file Of employee_master;
-    fileOfEmployeeSlave =   file Of employeeSlave;
+    procedure min_cod (var arr_r: array_reg_d; var arr_f: array_file_d; var min: reg_det);
+    var
+        i: integer;
+    begin
+        i:= min_pos(arr_r);
+        min:= arr_r[i];
+        leer(arr_f[i],arr_r[i]); 
+    end;
 
-Procedure updateMasterFile(Var masterFile: fileOfEmployeeMaster; employeeFiles: arrayOfEmployeeSlave);
+    procedure updateMaster(var master: file_master; var arr_r: array_reg_d; var arr_f: array_file_d; var txt: Text);
+    var
+        min: reg_det;
+        regm: reg_master;
+        aux: integer;
+        cant_d: integer;
+        text: String;
+    begin
+        min_cod(arr_r,arr_f,min);
+        while (min.cod <> highValue) do 
+            begin
+                while (regm.cod <> min.cod) do 
+                    Read(master,regm);
+            aux:= min.cod;
+            while (aux = min.cod) do
+              begin
+                cant_d := cant_d + min.days_requested;
+                min_cod(arr_r,arr_f,min);
+              end;
+            if ((regm.vactationDays - cant_d) <  0) then 
+                begin
+                    Write(txt, regm.cod, regm.name, regm.surname, regm.vactationDays, cant_d);
+                end
+            else 
+                begin
+                  regm.vactationDays := regm.vactationDays - cant_d;  
+                  Seek(master, FilePos(master) - 1);
+                  Write(master, regm);
+                end;    
+            end;
+    end;
 
-Var 
-    masterReg:   employeeMaster;
-    slaveReg:   employeeSlave;
-    i:   Integer;
-Begin
-    Reset(masterFile);
-    For i:= 1 To N Do
-        Reset(employeeFiles[i]);
-    For i:= 1 To N Do
-        Begin
-            While (Not)
-             
-            Read(masterFile, masterReg);
-            Read(employeeFiles[i], slaveReg);
+Begin 
 
-
-        End;
+End.

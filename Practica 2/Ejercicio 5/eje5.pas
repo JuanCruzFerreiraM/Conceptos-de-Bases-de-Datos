@@ -54,14 +54,14 @@ Begin
                         Begin
                             total_l_n := total_l_n + r.cant_n;
                             total_l_a := total_l_a  + r.cant_a;
-                            WriteLn('Cantidad de niños: ',r.cant_n,' Cantidad de adultos: ',r.cant_a);
+                            WriteLn('Cantidad de ninos: ',r.cant_n,' Cantidad de adultos: ',r.cant_a);
                             leer(f,r);
                         End;
                     total_n := total_n + total_l_n;
                     total_a := total_a + total_l_a;
-                    WriteLn('Total niños en localiad ',aux_localidad,': ',total_l_n,' Total adultos en localidad ',aux_localidad,': ',total_l_a);
+                    WriteLn('Total ninos en localiad ',aux_localidad,': ',total_l_n,' Total adultos en localidad ',aux_localidad,': ',total_l_a);
                 End;
-            WriteLn('Total niños en partido ',aux_partido,': ',total_n,' Total adultos en partido ',aux_partido,': ',total_a);    
+            WriteLn('Total ninos en partido ',aux_partido,': ',total_n,' Total adultos en partido ',aux_partido,': ',total_a);    
         End;
       Close(f);  
 End;
